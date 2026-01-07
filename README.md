@@ -87,6 +87,7 @@ npm start
 ### Default Login Credentials
 
 - **Employer:** employer@company.com / Password123
+- **Employee:** you can create an employee account by adding it thru the employer dashboard.
 
 ## Usage
 
