@@ -5,6 +5,8 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth');
 const employeeRoutes = require('./routes/employees');
 const activityRoutes = require('./routes/activity');
+const expenseRoutes = require('./routes/expenses');
+const budgetRequestRoutes = require('./routes/budgetRequests');
 
 const app = express();
 
@@ -16,6 +18,8 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/employees', employeeRoutes);
 app.use('/api/activity', activityRoutes);
+app.use('/api/expenses', expenseRoutes);
+app.use('/api/budget-requests', budgetRequestRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

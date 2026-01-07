@@ -1,0 +1,217 @@
+/* Add Budget Modal */
+.add-budget-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  padding: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: modalSlideIn 0.2s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.add-budget-modal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.add-budget-modal .modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1F2937;
+  margin: 0;
+}
+
+.add-budget-modal .modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #F3F4F6;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6B7280;
+  transition: all 0.15s ease;
+}
+
+.add-budget-modal .modal-close:hover {
+  background: #E5E7EB;
+  color: #374151;
+}
+
+.add-budget-modal .modal-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Employee Info Section */
+.employee-info-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: #F9FAFB;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.employee-info-section .employee-avatar {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.employee-info-section .employee-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1F2937;
+  margin: 0;
+}
+
+.employee-info-section .employee-email {
+  font-size: 13px;
+  color: #6B7280;
+  margin: 4px 0 0;
+}
+
+/* Current Budget Info */
+.current-budget-info {
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.budget-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 14px;
+  color: #374151;
+}
+
+.budget-row:not(:last-child) {
+  border-bottom: 1px solid #D1FAE5;
+}
+
+.budget-value {
+  font-weight: 600;
+  color: #047857;
+}
+
+/* Form */
+.add-budget-modal .form-group {
+  margin-bottom: 20px;
+}
+
+.add-budget-modal label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.add-budget-modal input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #1F2937;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.add-budget-modal input:focus {
+  outline: none;
+  border-color: #6366F1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.add-budget-modal input::placeholder {
+  color: #9CA3AF;
+}
+
+/* Error Message */
+.add-budget-modal .error-message {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #DC2626;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+/* Modal Actions */
+.add-budget-modal .modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.add-budget-modal .btn-cancel {
+  flex: 1;
+  padding: 12px 20px;
+  background: #ffffff;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.add-budget-modal .btn-cancel:hover {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+}
+
+.add-budget-modal .btn-submit {
+  flex: 1;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.add-budget-modal .btn-submit:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.add-budget-modal .btn-cancel:disabled,
+.add-budget-modal .btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}

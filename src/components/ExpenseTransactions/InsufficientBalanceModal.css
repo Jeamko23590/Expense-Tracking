@@ -1,0 +1,227 @@
+/* Insufficient Balance Modal */
+.insufficient-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 420px;
+  padding: 32px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: modalSlideIn 0.2s ease-out;
+  text-align: center;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Warning Icon */
+.warning-icon {
+  width: 64px;
+  height: 64px;
+  background: #FEF3C7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  color: #D97706;
+}
+
+.warning-icon svg {
+  width: 32px;
+  height: 32px;
+}
+
+.insufficient-modal .modal-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1F2937;
+  margin: 0 0 8px;
+}
+
+.modal-message {
+  color: #6B7280;
+  font-size: 14px;
+  margin: 0 0 20px;
+}
+
+/* Balance Info */
+.balance-info {
+  background: #F9FAFB;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.balance-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #374151;
+}
+
+.balance-row:not(:last-child) {
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.balance-value {
+  font-weight: 600;
+  color: #10B981;
+}
+
+.expense-value {
+  font-weight: 600;
+  color: #1F2937;
+}
+
+.shortfall {
+  color: #DC2626;
+}
+
+.shortfall-value {
+  font-weight: 600;
+  color: #DC2626;
+}
+
+/* Request Form */
+.request-form {
+  text-align: left;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #4F46E5;
+  margin: 0 0 16px;
+  text-align: center;
+}
+
+.request-form .form-group {
+  margin-bottom: 16px;
+}
+
+.request-form label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.request-form input,
+.request-form textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #1F2937;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+
+.request-form textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.request-form input:focus,
+.request-form textarea:focus {
+  outline: none;
+  border-color: #6366F1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.request-form input::placeholder,
+.request-form textarea::placeholder {
+  color: #9CA3AF;
+}
+
+/* Error Message */
+.request-form .error-message {
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: #DC2626;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+/* Success Message */
+.success-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #D1FAE5;
+  border-radius: 8px;
+  padding: 16px;
+  color: #047857;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.success-message svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Modal Actions */
+.insufficient-modal .modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.insufficient-modal .btn-cancel {
+  flex: 1;
+  padding: 12px 20px;
+  background: #ffffff;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.insufficient-modal .btn-cancel:hover {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+}
+
+.insufficient-modal .btn-request {
+  flex: 1;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.insufficient-modal .btn-request:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+}
+
+.insufficient-modal .btn-cancel:disabled,
+.insufficient-modal .btn-request:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}

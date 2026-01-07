@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Expenses table
+-- Expenses table (no approval needed - instant deduction)
 CREATE TABLE IF NOT EXISTS expenses (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
@@ -27,10 +27,23 @@ CREATE TABLE IF NOT EXISTS expenses (
   category VARCHAR(100) NOT NULL,
   date DATE NOT NULL,
   notes TEXT,
-  status VARCHAR(50) DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+-- Budget requests table (for pending budget increase requests)
+CREATE TABLE IF NOT EXISTS budget_requests (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  requested_amount DECIMAL(12, 2) NOT NULL,
+  reason TEXT,
+  status VARCHAR(50) DEFAULT 'pending',
+  approved_amount DECIMAL(12, 2),
+  reviewed_by INT,
+  reviewed_at TIMESTAMP NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  FOREIGN KEY (reviewed_by) REFERENCES users(id) ON DELETE SET NULL
 );
 
 -- Activity log table

@@ -1,63 +1,118 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import AddExpenseModal from './AddExpenseModal';
+import InsufficientBalanceModal from './InsufficientBalanceModal';
 import './ExpenseTransactions.css';
 
 /**
  * ExpenseTransactions Component
- * Displays list of expense transactions for employees.
- * Shows expense details with status badges and amounts.
+ * Displays list of expense transactions. Expenses are instant (no approval needed).
  */
-const ExpenseTransactions = ({ user }) => {
+const ExpenseTransactions = ({ user, onExpenseAdded }) => {
   const [expenses, setExpenses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [insufficientModal, setInsufficientModal] = useState({ open: false, balance: 0, requested: 0 });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Load expenses from localStorage on mount
   useEffect(() => {
-    const savedExpenses = localStorage.getItem(`corticoExpenses_${user?.email}`);
-    if (savedExpenses) {
-      setExpenses(JSON.parse(savedExpenses));
-    }
-  }, [user]);
+    fetchExpenses();
+  }, []);
 
-  // Save expenses to localStorage whenever they change
-  useEffect(() => {
-    if (user?.email) {
-      localStorage.setItem(`corticoExpenses_${user.email}`, JSON.stringify(expenses));
-    }
-  }, [expenses, user]);
+  const fetchExpenses = async () => {
+    try {
+      const token = localStorage.getItem('corticoExpenseToken');
+      const response = await fetch('http://localhost:5000/api/expenses', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
 
-  // Add new expense
-  const handleAddExpense = (newExpense) => {
-    setExpenses(prev => [newExpense, ...prev]);
+      if (response.ok) {
+        const data = await response.json();
+        setExpenses(data);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Failed to fetch expenses');
+      }
+    } catch (err) {
+      setError('Failed to connect to server');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Format date
+  const handleAddExpense = async (expenseData) => {
+    try {
+      const token = localStorage.getItem('corticoExpenseToken');
+      const response = await fetch('http://localhost:5000/api/expenses', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(expenseData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setExpenses(prev => [data, ...prev]);
+        if (onExpenseAdded) onExpenseAdded();
+        return { success: true };
+      } else if (response.status === 400 && data.message === 'Insufficient balance') {
+        // Show insufficient balance modal
+        setInsufficientModal({
+          open: true,
+          balance: data.balance,
+          requested: data.requested
+        });
+        return { success: false, insufficientBalance: true };
+      } else {
+        return { success: false, message: data.message };
+      }
+    } catch (err) {
+      return { success: false, message: 'Failed to connect to server' };
+    }
+  };
+
+  const handleRequestBudget = async (amount, reason) => {
+    try {
+      const token = localStorage.getItem('corticoExpenseToken');
+      const response = await fetch('http://localhost:5000/api/budget-requests', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ requestedAmount: amount, reason })
+      });
+
+      if (response.ok) {
+        setInsufficientModal({ open: false, balance: 0, requested: 0 });
+        if (onExpenseAdded) onExpenseAdded(); // Refresh stats
+        return { success: true };
+      } else {
+        const data = await response.json();
+        return { success: false, message: data.message };
+      }
+    } catch (err) {
+      return { success: false, message: 'Failed to connect to server' };
+    }
+  };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
-      year: 'numeric' 
-    });
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   };
 
-  // Get status badge class
-  const getStatusClass = (status) => {
-    switch (status) {
-      case 'approved':
-        return 'status-approved';
-      case 'pending':
-        return 'status-pending';
-      case 'rejected':
-        return 'status-rejected';
-      default:
-        return 'status-pending';
-    }
-  };
+  if (loading) {
+    return (
+      <div className="expense-transactions">
+        <div className="loading-state">Loading expenses...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="expense-transactions">
-      {/* Section Header */}
       <div className="transactions-header">
         <div className="transactions-title-section">
           <div className="transactions-icon">
@@ -69,7 +124,7 @@ const ExpenseTransactions = ({ user }) => {
           </div>
           <div>
             <h2 className="transactions-title">Expense Transactions</h2>
-            <p className="transactions-subtitle">Track and manage your expense submissions</p>
+            <p className="transactions-subtitle">Track and manage your expenses</p>
           </div>
         </div>
         <button className="add-expense-btn" onClick={() => setIsModalOpen(true)}>
@@ -81,7 +136,8 @@ const ExpenseTransactions = ({ user }) => {
         </button>
       </div>
 
-      {/* Expense List */}
+      {error && <div className="error-state">{error}</div>}
+
       <div className="expense-list">
         {expenses.length === 0 ? (
           <div className="empty-state">
@@ -91,26 +147,18 @@ const ExpenseTransactions = ({ user }) => {
           expenses.map((expense) => (
             <div key={expense.id} className="expense-item">
               <div className="expense-item-left">
-                {/* Tag Icon */}
                 <div className="expense-tag-icon">
                   <svg viewBox="0 0 24 24" fill="none">
-                    <path d="M20.59 13.41L13.42 20.58C13.2343 20.766 13.0137 20.9135 12.7709 21.0141C12.5281 21.1148 12.2678 21.1666 12.005 21.1666C11.7422 21.1666 11.4819 21.1148 11.2391 21.0141C10.9963 20.9135 10.7757 20.766 10.59 20.58L2 12V2H12L20.59 10.59C20.9625 10.9647 21.1716 11.4716 21.1716 12C21.1716 12.5284 20.9625 13.0353 20.59 13.41Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M20.59 13.41L13.42 20.58C13.04 20.96 12.53 21.17 12 21.17C11.47 21.17 10.96 20.96 10.59 20.58L2 12V2H12L20.59 10.59C20.96 10.96 21.17 11.47 21.17 12C21.17 12.53 20.96 13.04 20.59 13.41Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <circle cx="7" cy="7" r="1.5" fill="currentColor"/>
                   </svg>
                 </div>
-
-                {/* Expense Details */}
                 <div className="expense-details">
-                  <div className="expense-title-row">
-                    <h3 className="expense-title">{expense.description}</h3>
-                    <span className={`expense-status ${getStatusClass(expense.status)}`}>
-                      {expense.status}
-                    </span>
-                  </div>
+                  <h3 className="expense-title">{expense.description}</h3>
                   <div className="expense-meta">
                     <span className="expense-category">
                       <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M20.59 13.41L13.42 20.58C13.2343 20.766 13.0137 20.9135 12.7709 21.0141C12.5281 21.1148 12.2678 21.1666 12.005 21.1666C11.7422 21.1666 11.4819 21.1148 11.2391 21.0141C10.9963 20.9135 10.7757 20.766 10.59 20.58L2 12V2H12L20.59 10.59C20.9625 10.9647 21.1716 11.4716 21.1716 12C21.1716 12.5284 20.9625 13.0353 20.59 13.41Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M20.59 13.41L13.42 20.58C13.04 20.96 12.53 21.17 12 21.17C11.47 21.17 10.96 20.96 10.59 20.58L2 12V2H12L20.59 10.59C20.96 10.96 21.17 11.47 21.17 12C21.17 12.53 20.96 13.04 20.59 13.41Z" stroke="currentColor" strokeWidth="2"/>
                       </svg>
                       {expense.category}
                     </span>
@@ -126,21 +174,24 @@ const ExpenseTransactions = ({ user }) => {
                   </div>
                 </div>
               </div>
-
-              {/* Amount */}
-              <div className="expense-amount">
-                ${expense.amount.toLocaleString()}
-              </div>
+              <div className="expense-amount">${expense.amount.toLocaleString()}</div>
             </div>
           ))
         )}
       </div>
 
-      {/* Add Expense Modal */}
       <AddExpenseModal 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onAdd={handleAddExpense}
+      />
+
+      <InsufficientBalanceModal
+        isOpen={insufficientModal.open}
+        onClose={() => setInsufficientModal({ open: false, balance: 0, requested: 0 })}
+        balance={insufficientModal.balance}
+        requested={insufficientModal.requested}
+        onRequestBudget={handleRequestBudget}
       />
     </div>
   );

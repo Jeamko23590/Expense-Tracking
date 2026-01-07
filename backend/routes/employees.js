@@ -115,4 +115,52 @@ router.delete('/:id', auth, employerOnly, async (req, res) => {
   }
 });
 
+/**
+ * PUT /api/employees/:id/budget
+ * Add budget to employee (Employer only)
+ */
+router.put('/:id/budget', auth, employerOnly, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { amount } = req.body;
+
+    if (!amount || amount <= 0) {
+      return res.status(400).json({ message: 'Valid amount is required' });
+    }
+
+    // Get employee info
+    const [employees] = await pool.query(
+      'SELECT first_name, last_name, budget FROM users WHERE id = ? AND role = "Employee"',
+      [id]
+    );
+
+    if (employees.length === 0) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    const employee = employees[0];
+
+    // Add to budget
+    await pool.query(
+      'UPDATE users SET budget = budget + ? WHERE id = ?',
+      [amount, id]
+    );
+
+    // Log activity
+    await pool.query(
+      `INSERT INTO activity_log (user_id, action_type, action, details, amount)
+       VALUES (?, 'budget_added', 'Added budget to employee', ?, ?)`,
+      [req.user.id, `${employee.first_name} ${employee.last_name}`, amount]
+    );
+
+    res.json({ 
+      message: 'Budget added successfully',
+      newBudget: parseFloat(employee.budget) + amount
+    });
+  } catch (error) {
+    console.error('Add budget error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;
