@@ -4,19 +4,21 @@ import './ActivityLog.css';
 /**
  * ActivityLog Component
  * Displays recent management actions fetched from backend API.
+ * On mobile, shows as a floating button that opens a modal.
  */
 const ActivityLog = ({ refreshTrigger }) => {
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
+  const [lastViewedCount, setLastViewedCount] = useState(() => {
+    return parseInt(localStorage.getItem('activityLogViewedCount') || '0', 10);
+  });
 
-  // Fetch activities from API
   const fetchActivities = useCallback(async () => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
       const response = await fetch('http://localhost:5000/api/activity', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        headers: { 'Authorization': `Bearer ${token}` }
       });
 
       if (response.ok) {
@@ -30,12 +32,10 @@ const ActivityLog = ({ refreshTrigger }) => {
     }
   }, []);
 
-  // Load activities on mount and when refreshTrigger changes
   useEffect(() => {
     fetchActivities();
   }, [fetchActivities, refreshTrigger]);
 
-  // Format relative time
   const formatTimeAgo = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -49,7 +49,6 @@ const ActivityLog = ({ refreshTrigger }) => {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  // Get icon based on activity type
   const getActivityIcon = (type) => {
     switch (type) {
       case 'employee_added':
@@ -60,19 +59,15 @@ const ActivityLog = ({ refreshTrigger }) => {
           </svg>
         );
       case 'budget_updated':
+      case 'budget_added':
+      case 'budget_approved':
         return (
           <svg viewBox="0 0 24 24" fill="none">
             <line x1="12" y1="1" x2="12" y2="23" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
             <path d="M17 5H9.5C7.5 5 6 6.5 6 8.5S7.5 12 9.5 12H14.5C16.5 12 18 13.5 18 15.5S16.5 19 14.5 19H6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
           </svg>
         );
-      case 'expense_approved':
-        return (
-          <svg viewBox="0 0 24 24" fill="none">
-            <polyline points="20,6 9,17 4,12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        );
-      case 'expense_rejected':
+      case 'budget_rejected':
         return (
           <svg viewBox="0 0 24 24" fill="none">
             <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -90,18 +85,8 @@ const ActivityLog = ({ refreshTrigger }) => {
     }
   };
 
-  return (
-    <div className="activity-log">
-      {/* Header */}
-      <div className="activity-header">
-        <div className="activity-title-row">
-          <span className="activity-icon-header">⚡</span>
-          <h2 className="activity-title">Activity Log</h2>
-        </div>
-        <p className="activity-subtitle">Recent management actions</p>
-      </div>
-
-      {/* Activity List */}
+  const ActivityContent = () => (
+    <>
       <div className="activity-list">
         {loading ? (
           <div className="activity-empty">
@@ -129,7 +114,60 @@ const ActivityLog = ({ refreshTrigger }) => {
           ))
         )}
       </div>
-    </div>
+    </>
+  );
+
+  return (
+    <>
+      {/* Desktop/Tablet View */}
+      <div className="activity-log activity-log-desktop">
+        <div className="activity-header">
+          <div className="activity-title-row">
+            <span className="activity-icon-header">⚡</span>
+            <h2 className="activity-title">Activity Log</h2>
+          </div>
+          <p className="activity-subtitle">Recent management actions</p>
+        </div>
+        <ActivityContent />
+      </div>
+
+      {/* Mobile Floating Button */}
+      <button 
+        className="activity-fab"
+        onClick={() => {
+          setIsMobileModalOpen(true);
+          setLastViewedCount(activities.length);
+          localStorage.setItem('activityLogViewedCount', activities.length.toString());
+        }}
+      >
+        <span className="fab-icon">⚡</span>
+        {activities.length > lastViewedCount && (
+          <span className="fab-badge">{Math.min(activities.length - lastViewedCount, 9)}{(activities.length - lastViewedCount) > 9 ? '+' : ''}</span>
+        )}
+      </button>
+
+      {/* Mobile Modal */}
+      {isMobileModalOpen && (
+        <div className="activity-modal-overlay" onClick={() => setIsMobileModalOpen(false)}>
+          <div className="activity-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="activity-modal-header">
+              <div className="activity-title-row">
+                <span className="activity-icon-header">⚡</span>
+                <h2 className="activity-title">Activity Log</h2>
+              </div>
+              <button className="activity-modal-close" onClick={() => setIsMobileModalOpen(false)}>
+                <svg viewBox="0 0 24 24" fill="none">
+                  <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </button>
+            </div>
+            <p className="activity-subtitle">Recent management actions</p>
+            <ActivityContent />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

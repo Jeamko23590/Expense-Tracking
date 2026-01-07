@@ -221,33 +221,74 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .expense-transactions {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
   .transactions-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+  }
+
+  .transactions-title {
+    font-size: 16px;
+  }
+
+  .transactions-subtitle {
+    font-size: 12px;
   }
 
   .add-expense-btn {
     width: 100%;
     justify-content: center;
+    padding: 12px 16px;
+  }
+
+  .expense-list {
+    gap: 10px;
   }
 
   .expense-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
+    padding: 14px 16px;
   }
 
   .expense-item-left {
     width: 100%;
   }
 
-  .expense-amount {
-    align-self: flex-end;
+  .expense-tag-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .expense-tag-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .expense-title {
+    font-size: 14px;
   }
 
   .expense-meta {
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
+  }
+
+  .expense-category,
+  .expense-date {
+    font-size: 12px;
+  }
+
+  .expense-amount {
+    align-self: flex-end;
+    font-size: 16px;
   }
 }

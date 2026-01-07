@@ -282,29 +282,92 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .employee-management {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
   .management-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+  }
+
+  .management-title-section {
+    gap: 10px;
+  }
+
+  .management-title {
+    font-size: 16px;
+  }
+
+  .management-subtitle {
+    font-size: 12px;
   }
 
   .add-employee-btn {
     width: 100%;
     justify-content: center;
+    padding: 12px 16px;
+  }
+
+  .employee-card {
+    padding: 16px;
   }
 
   .employee-info {
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
 
+  .employee-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .employee-details {
+    width: 100%;
+  }
+
+  .employee-name {
+    font-size: 15px;
+  }
+
+  .employee-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .add-budget-btn,
   .view-expenses-btn {
     width: 100%;
     justify-content: center;
-    margin-top: 8px;
+    padding: 10px 14px;
   }
 
   .budget-stats {
     grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .stat-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+  }
+
+  .stat-label {
+    margin-bottom: 0;
+  }
+
+  .stat-value {
+    font-size: 16px;
   }
 }
 
@@ -315,5 +378,16 @@
 
   .stat-value {
     font-size: 16px;
+  }
+
+  .employee-actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .add-budget-btn,
+  .view-expenses-btn {
+    padding: 8px 12px;
+    font-size: 12px;
   }
 }

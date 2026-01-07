@@ -1,4 +1,4 @@
-/* Activity Log Container */
+/* Activity Log Container - Desktop */
 .activity-log {
   background: #ffffff;
   border-radius: 16px;
@@ -110,9 +110,183 @@
   margin: 0;
 }
 
+/* Mobile Floating Action Button */
+.activity-fab {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+  cursor: pointer;
+  z-index: 100;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.activity-fab:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(79, 70, 229, 0.5);
+}
+
+.activity-fab:active {
+  transform: scale(0.95);
+}
+
+.fab-icon {
+  font-size: 24px;
+}
+
+.fab-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 20px;
+  height: 20px;
+  background: #EF4444;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+/* Mobile Modal Overlay */
+.activity-modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+/* Mobile Modal */
+.activity-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.activity-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.activity-modal-close {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #F3F4F6;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6B7280;
+  transition: all 0.15s ease;
+}
+
+.activity-modal-close:hover {
+  background: #E5E7EB;
+  color: #374151;
+}
+
+.activity-modal-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+.activity-modal .activity-subtitle {
+  margin-bottom: 20px;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .activity-log {
     position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Hide desktop activity log on mobile */
+  .activity-log-desktop {
+    display: none !important;
+  }
+
+  /* Show floating button on mobile */
+  .activity-fab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Show modal overlay on mobile - centered */
+  .activity-modal-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .activity-modal {
+    margin: 16px;
+    border-radius: 16px;
+    max-height: calc(100vh - 32px);
+    width: calc(100% - 32px);
+    max-width: 400px;
+  }
+
+  .activity-item {
+    padding-bottom: 12px;
+    gap: 10px;
+  }
+
+  .activity-item-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .activity-action {
+    font-size: 13px;
+  }
+
+  .activity-details {
+    font-size: 12px;
+  }
+
+  .activity-amount {
+    font-size: 12px;
+  }
+
+  .activity-time {
+    font-size: 11px;
   }
 }

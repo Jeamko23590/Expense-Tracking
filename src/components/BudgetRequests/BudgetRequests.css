@@ -222,22 +222,103 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .budget-requests {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .requests-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+  }
+
+  .requests-title {
+    font-size: 16px;
+  }
+
+  .requests-subtitle {
+    font-size: 12px;
+  }
+
+  .requests-count {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+
+  .requests-list {
+    gap: 12px;
+  }
+
   .request-card {
     flex-direction: column;
     align-items: stretch;
-    gap: 16px;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .request-info {
+    gap: 12px;
+  }
+
+  .request-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .request-name {
+    font-size: 14px;
+  }
+
+  .request-email {
+    font-size: 12px;
+  }
+
+  .request-current {
+    font-size: 11px;
   }
 
   .request-amount-section {
     text-align: left;
+    min-width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(245, 158, 11, 0.1);
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  .request-amount {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .amount-value {
+    font-size: 20px;
+  }
+
+  .request-reason {
+    display: none;
+  }
+
+  .request-time {
+    margin: 0;
   }
 
   .request-actions {
     flex-direction: row;
+    gap: 10px;
   }
 
   .btn-approve,
   .btn-reject {
     flex: 1;
+    padding: 12px 16px;
+    min-width: auto;
   }
 }

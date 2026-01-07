@@ -121,9 +121,15 @@ const EmployerDashboard = () => {
           <EmployeeManagement onEmployeeAdded={handleRefresh} />
         </div>
 
+        {/* Desktop Sidebar */}
         <div className="dashboard-sidebar">
           <ActivityLog refreshTrigger={activityRefresh} />
         </div>
+      </div>
+
+      {/* Mobile Activity Log - rendered outside layout for floating button */}
+      <div className="mobile-activity-wrapper">
+        <ActivityLog refreshTrigger={activityRefresh} />
       </div>
     </div>
   );
