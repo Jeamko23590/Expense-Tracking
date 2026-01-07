@@ -90,6 +90,11 @@
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
+.form-group input:disabled {
+  background-color: #F9FAFB;
+  cursor: not-allowed;
+}
+
 /* Password input wrapper for toggle icon */
 .password-input-wrapper {
   position: relative;
@@ -138,91 +143,30 @@
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.login-button:hover {
+.login-button:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(249, 112, 102, 0.4);
   background: #F85A4F;
 }
 
-.login-button:active {
+.login-button:active:not(:disabled) {
   transform: translateY(0);
 }
 
-/* Demo section */
-.demo-section {
-  margin-top: 28px;
-  padding-top: 24px;
-  border-top: 1px solid #F3F4F6;
+.login-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-.demo-label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 12px;
-  color: #6B7280;
-  margin: 0 0 16px;
-}
-
-.demo-icon {
-  font-size: 10px;
-}
-
-/* Demo account buttons - Cortico indigo/purple */
-.demo-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.demo-button {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px;
-  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.demo-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
-}
-
-.demo-button-icon {
-  width: 20px;
-  height: 20px;
-  color: #ffffff;
-  flex-shrink: 0;
-}
-
-.demo-button-text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-}
-
-.demo-role {
-  font-size: 12px;
-  font-weight: 600;
-  color: #ffffff;
-}
-
-.demo-email {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.demo-note {
-  font-size: 11px;
-  color: #9CA3AF;
+/* Error Message */
+.login-error {
+  background: #FEE2E2;
+  color: #DC2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 20px;
   text-align: center;
-  margin: 16px 0 0;
 }
 
 /* Mobile responsiveness */
@@ -238,13 +182,5 @@
 
   .login-title {
     font-size: 22px;
-  }
-
-  .demo-buttons {
-    grid-template-columns: 1fr;
-  }
-
-  .demo-button {
-    justify-content: center;
   }
 }

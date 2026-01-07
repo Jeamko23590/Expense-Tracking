@@ -13,26 +13,59 @@ import './styles/App.css';
 function App() {
   // User state - null when not logged in
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Check localStorage for existing session on mount
+  // Check for existing token on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem('corticoExpenseUser');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
+    const checkAuth = async () => {
+      const token = localStorage.getItem('corticoExpenseToken');
+      
+      if (token) {
+        try {
+          const response = await fetch('http://localhost:5000/api/auth/me', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          
+          if (response.ok) {
+            const userData = await response.json();
+            setUser(userData);
+          } else {
+            // Token invalid, clear it
+            localStorage.removeItem('corticoExpenseToken');
+          }
+        } catch (error) {
+          console.error('Auth check failed:', error);
+          localStorage.removeItem('corticoExpenseToken');
+        }
+      }
+      
+      setLoading(false);
+    };
+
+    checkAuth();
   }, []);
 
-  // Handle login - save user to state and localStorage
+  // Handle login - save user to state
   const handleLogin = (userData) => {
     setUser(userData);
-    localStorage.setItem('corticoExpenseUser', JSON.stringify(userData));
   };
 
   // Handle logout - clear user from state and localStorage
   const handleLogout = () => {
     setUser(null);
-    localStorage.removeItem('corticoExpenseUser');
+    localStorage.removeItem('corticoExpenseToken');
   };
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="App loading">
+        <div className="loading-spinner">Loading...</div>
+      </div>
+    );
+  }
 
   // Show login page if not authenticated
   if (!user) {

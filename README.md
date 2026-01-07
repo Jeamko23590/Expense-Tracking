@@ -1,6 +1,6 @@
 # CorticoExpense - Expense Tracker Application
 
-A single-page application for employees to easily report and track expenses, with separate dashboards for employers and employees.
+A full-stack application for employees to easily report and track expenses, with separate dashboards for employers and employees.
 
 ## Features
 
@@ -10,14 +10,16 @@ A single-page application for employees to easily report and track expenses, wit
 - Activity log for recent management actions
 - View all expenses with status badges (pending/approved/rejected)
 - Mobile-friendly responsive design
-- Data persistence using localStorage
-- Demo accounts for quick testing
+- JWT-based authentication
+- MySQL database for data persistence
 
 ## Tech Stack
 
 - **Frontend:** React.js (JavaScript, no TypeScript)
+- **Backend:** Node.js with Express.js
+- **Database:** MySQL
+- **Authentication:** JWT (JSON Web Tokens)
 - **Styling:** Custom CSS with Cortico color scheme
-- **Storage:** localStorage for data persistence
 
 ## Getting Started
 
@@ -26,6 +28,7 @@ A single-page application for employees to easily report and track expenses, wit
 Make sure you have the following installed:
 - [Node.js](https://nodejs.org/) (v14 or higher)
 - [npm](https://www.npmjs.com/) (comes with Node.js)
+- [MySQL](https://www.mysql.com/) or XAMPP with MySQL
 
 ### Clone the Repository
 
@@ -34,25 +37,48 @@ git clone https://github.com/Jeamko23590/Expense-Tracking.git
 cd Expense-Tracking/expense-tracker
 ```
 
-### Install Dependencies
+### Database Setup
+
+1. Create a MySQL database named `cortico_expense`
+2. Run the SQL script in `backend/config/init.sql` to create tables and default employer account
+
+### Backend Setup
 
 ```bash
+cd backend
 npm install
 ```
 
-### Run the Application
+Update `backend/.env` with your MySQL credentials if needed:
+```
+DB_HOST=localhost
+DB_PORT=3306
+DB_NAME=cortico_expense
+DB_USER=root
+DB_PASSWORD=
+```
+
+Start the backend server:
+```bash
+npm start
+```
+
+The API will run on [http://localhost:5000](http://localhost:5000).
+
+### Frontend Setup
 
 ```bash
+cd ..
+npm install
 npm start
 ```
 
 The app will open automatically in your browser at [http://localhost:3000](http://localhost:3000).
 
-### Demo Accounts
+### Default Account
 
-Use these demo accounts to test the application:
-- **Employer:** employer@company.com (any password)
-- **Employee:** employee@company.com (any password)
+- **Employer:** employer@company.com
+- **Password:** Password123
 
 ### Build for Production
 
@@ -66,48 +92,39 @@ This creates an optimized production build in the `build` folder.
 
 ```
 expense-tracker/
+├── backend/
+│   ├── config/
+│   │   ├── db.js
+│   │   └── init.sql
+│   ├── middleware/
+│   │   └── auth.js
+│   ├── routes/
+│   │   └── auth.js
+│   ├── server.js
+│   ├── package.json
+│   └── .env
 ├── public/
 │   └── index.html
 ├── src/
 │   ├── components/
 │   │   ├── ActivityLog/
-│   │   │   ├── ActivityLog.js
-│   │   │   ├── ActivityLog.css
-│   │   │   └── index.js
 │   │   ├── Dashboard/
-│   │   │   ├── EmployerDashboard.js
-│   │   │   ├── EmployerDashboard.css
-│   │   │   ├── EmployeeDashboard.js
-│   │   │   ├── EmployeeDashboard.css
-│   │   │   └── index.js
 │   │   ├── EmployeeManagement/
-│   │   │   ├── EmployeeManagement.js
-│   │   │   ├── EmployeeManagement.css
-│   │   │   ├── AddEmployeeModal.js
-│   │   │   ├── AddEmployeeModal.css
-│   │   │   └── index.js
 │   │   ├── ExpenseTransactions/
-│   │   │   ├── ExpenseTransactions.js
-│   │   │   ├── ExpenseTransactions.css
-│   │   │   ├── AddExpenseModal.js
-│   │   │   ├── AddExpenseModal.css
-│   │   │   └── index.js
 │   │   ├── Login/
-│   │   │   ├── Login.js
-│   │   │   ├── Login.css
-│   │   │   └── index.js
 │   │   └── Navbar/
-│   │       ├── Navbar.js
-│   │       ├── Navbar.css
-│   │       └── index.js
 │   ├── styles/
-│   │   ├── App.css
-│   │   └── index.css
 │   ├── App.js
 │   └── index.js
 ├── package.json
 └── README.md
 ```
+
+## API Endpoints
+
+### Authentication
+- `POST /api/auth/login` - User login
+- `GET /api/auth/me` - Get current user
 
 ## License
 

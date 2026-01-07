@@ -3,41 +3,45 @@ import './Login.css';
 
 /**
  * Login Component
- * Displays login form with email/password fields and demo account buttons.
- * Demo accounts allow quick access for testing (Employer and Employee roles).
+ * Displays login form with email/password fields.
+ * Connects to backend API for authentication.
  */
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-
-  // Demo account credentials
-  const demoAccounts = {
-    employer: {
-      email: 'employer@company.com',
-      role: 'Employer'
-    },
-    employee: {
-      email: 'employee@company.com',
-      role: 'Employee'
-    }
-  };
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email && password) {
-      // Determine role based on email
-      const role = email.includes('employer') ? 'Employer' : 'Employee';
-      onLogin({ email, role });
-    }
-  };
+    setError('');
+    setLoading(true);
 
-  // Fill form with demo account credentials
-  const handleDemoClick = (accountType) => {
-    const account = demoAccounts[accountType];
-    setEmail(account.email);
-    setPassword('demo123');
+    try {
+      const response = await fetch('http://localhost:5000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      // Save token and user data
+      localStorage.setItem('corticoExpenseToken', data.token);
+      onLogin(data.user);
+    } catch (err) {
+      setError(err.message || 'An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -61,6 +65,13 @@ const Login = ({ onLogin }) => {
         <h1 className="login-title">CorticoExpense</h1>
         <p className="login-subtitle">Your smart expense management companion</p>
 
+        {/* Error Message */}
+        {error && (
+          <div className="login-error">
+            {error}
+          </div>
+        )}
+
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
@@ -72,6 +83,7 @@ const Login = ({ onLogin }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
@@ -85,6 +97,7 @@ const Login = ({ onLogin }) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                disabled={loading}
               />
               <button 
                 type="button" 
@@ -93,13 +106,11 @@ const Login = ({ onLogin }) => {
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? (
-                  // Eye-off icon (hide)
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 ) : (
-                  // Eye icon (show)
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -109,52 +120,10 @@ const Login = ({ onLogin }) => {
             </div>
           </div>
 
-          <button type="submit" className="login-button">
-            Sign In to CorticoExpense
+          <button type="submit" className="login-button" disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign In to CorticoExpense'}
           </button>
         </form>
-
-        {/* Demo Accounts Section */}
-        <div className="demo-section">
-          <p className="demo-label">
-            <span className="demo-icon">○</span>
-            Demo Accounts Available
-          </p>
-          
-          <div className="demo-buttons">
-            <button 
-              type="button"
-              className="demo-button"
-              onClick={() => handleDemoClick('employer')}
-            >
-              <svg viewBox="0 0 20 20" fill="none" className="demo-button-icon">
-                <rect x="3" y="4" width="14" height="12" rx="2" stroke="currentColor" strokeWidth="1.5"/>
-                <path d="M3 7L10 11L17 7" stroke="currentColor" strokeWidth="1.5"/>
-              </svg>
-              <div className="demo-button-text">
-                <span className="demo-role">Employer</span>
-                <span className="demo-email">employer@company.com</span>
-              </div>
-            </button>
-
-            <button 
-              type="button"
-              className="demo-button"
-              onClick={() => handleDemoClick('employee')}
-            >
-              <svg viewBox="0 0 20 20" fill="none" className="demo-button-icon">
-                <rect x="3" y="4" width="14" height="12" rx="2" stroke="currentColor" strokeWidth="1.5"/>
-                <path d="M3 7L10 11L17 7" stroke="currentColor" strokeWidth="1.5"/>
-              </svg>
-              <div className="demo-button-text">
-                <span className="demo-role">Employee</span>
-                <span className="demo-email">employee@company.com</span>
-              </div>
-            </button>
-          </div>
-
-          <p className="demo-note">Any password works for demo</p>
-        </div>
       </div>
     </div>
   );
