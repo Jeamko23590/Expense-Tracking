@@ -168,6 +168,7 @@ const AddExpenseModal = ({ isOpen, onClose, onAdd }) => {
               value={formData.date}
               onChange={handleChange}
               className={errors.date ? 'input-error' : ''}
+              max={new Date().toISOString().split('T')[0]}
               disabled={submitting}
             />
             {errors.date && <span className="error-message">{errors.date}</span>}
