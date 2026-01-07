@@ -1,12 +1,13 @@
 import React from 'react';
+import ExpenseTransactions from '../ExpenseTransactions';
 import './EmployeeDashboard.css';
 
 /**
  * EmployeeDashboard Component
  * Displays employee-specific dashboard with wallet balance, budget breakdown,
- * and expense summary cards.
+ * expense summary cards, and expense transactions list.
  */
-const EmployeeDashboard = () => {
+const EmployeeDashboard = ({ user }) => {
   // Placeholder data - will be dynamic later
   const walletData = {
     balance: 0,
@@ -128,6 +129,9 @@ const EmployeeDashboard = () => {
           <div className="expense-card-subtitle">Awaiting approval</div>
         </div>
       </div>
+
+      {/* Expense Transactions Section */}
+      <ExpenseTransactions user={user} />
     </div>
   );
 };

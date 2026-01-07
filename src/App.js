@@ -46,7 +46,7 @@ function App() {
   return (
     <div className="App">
       <Navbar user={user} onLogout={handleLogout} />
-      {isEmployee ? <EmployeeDashboard /> : <EmployerDashboard />}
+      {isEmployee ? <EmployeeDashboard user={user} /> : <EmployerDashboard />}
     </div>
   );
 }
