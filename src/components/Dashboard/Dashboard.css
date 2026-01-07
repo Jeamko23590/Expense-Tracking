@@ -1,0 +1,144 @@
+/* Dashboard container */
+.dashboard {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Grid layout for 4 cards - 2x2 */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* Base card styles */
+.dashboard-card {
+  padding: 20px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* White card variant */
+.card-white {
+  background-color: #ffffff;
+}
+
+/* Blue card variant */
+.card-blue {
+  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+}
+
+.card-blue .card-title,
+.card-blue .card-subtitle {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Card header with title and icon */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6B7280;
+}
+
+/* Icon container styles */
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Blue icon on white background - visible light blue */
+.icon-blue {
+  background-color: #E0EAFF;
+  color: #2563EB;
+}
+
+/* White icon on blue card */
+.icon-white {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+/* Yellow icon for pending - more visible */
+.icon-yellow {
+  background-color: #FEF3C7;
+  color: #D97706;
+}
+
+/* Card value - large number */
+.card-value {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.value-blue {
+  color: #3B82F6;
+}
+
+.value-white {
+  color: #ffffff;
+}
+
+.value-yellow {
+  color: #CA8A04;
+}
+
+/* Card subtitle - description text */
+.card-subtitle {
+  font-size: 13px;
+  color: #9CA3AF;
+}
+
+/* Responsive - stack cards on mobile */
+@media (max-width: 768px) {
+  .dashboard {
+    padding: 16px;
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .dashboard-card {
+    padding: 18px 20px;
+  }
+  
+  .card-value {
+    font-size: 30px;
+  }
+}
+
+/* Tablet - keep 2 columns but smaller gap */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dashboard {
+    padding: 20px;
+  }
+  
+  .dashboard-grid {
+    gap: 16px;
+  }
+}

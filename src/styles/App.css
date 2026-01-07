@@ -1,0 +1,9 @@
+/* 
+ * App Container Styles
+ * Main application layout and structure
+ */
+
+.App {
+  min-height: 100vh;
+  background-color: #F3F4F6;
+}
