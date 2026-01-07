@@ -40,7 +40,7 @@ const ExpenseTransactions = ({ user, onExpenseAdded }) => {
   const fetchExpenses = async () => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch('${API_URL}/api/expenses', {
+      const response = await fetch(`${API_URL}/api/expenses`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -61,7 +61,7 @@ const ExpenseTransactions = ({ user, onExpenseAdded }) => {
   const handleAddExpense = async (expenseData) => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch('${API_URL}/api/expenses', {
+      const response = await fetch(`${API_URL}/api/expenses`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +95,7 @@ const ExpenseTransactions = ({ user, onExpenseAdded }) => {
   const handleRequestBudget = async (amount, reason) => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch('${API_URL}/api/budget-requests', {
+      const response = await fetch(`${API_URL}/api/budget-requests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

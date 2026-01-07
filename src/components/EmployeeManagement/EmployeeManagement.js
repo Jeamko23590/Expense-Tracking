@@ -28,7 +28,7 @@ const EmployeeManagement = ({ onEmployeeAdded }) => {
   const fetchEmployees = async () => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch('${API_URL}/api/employees', {
+      const response = await fetch(`${API_URL}/api/employees`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -49,7 +49,7 @@ const EmployeeManagement = ({ onEmployeeAdded }) => {
   const handleAddEmployee = async (employeeData) => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch('${API_URL}/api/employees', {
+      const response = await fetch(`${API_URL}/api/employees`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

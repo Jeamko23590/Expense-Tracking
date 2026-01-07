@@ -1,5 +1,8 @@
--- MySQL Database Schema for CorticoExpense
--- Run this in phpMyAdmin after creating the database 'cortico_expense'
+-- MySQL/TiDB Database Schema for CorticoExpense
+-- TiDB Cloud SQL Console Instructions:
+-- 1. First run: CREATE DATABASE IF NOT EXISTS cortico_expense;
+-- 2. Then run: USE cortico_expense;
+-- 3. Then run the table creation statements below one by one
 
 -- Users table
 CREATE TABLE IF NOT EXISTS users (
@@ -18,7 +21,7 @@ CREATE TABLE IF NOT EXISTS users (
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Expenses table (no approval needed - instant deduction)
+-- Expenses table (no foreign keys for TiDB compatibility)
 CREATE TABLE IF NOT EXISTS expenses (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
@@ -27,11 +30,10 @@ CREATE TABLE IF NOT EXISTS expenses (
   category VARCHAR(100) NOT NULL,
   date DATE NOT NULL,
   notes TEXT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Budget requests table (for pending budget increase requests)
+-- Budget requests table (no foreign keys for TiDB compatibility)
 CREATE TABLE IF NOT EXISTS budget_requests (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
@@ -41,12 +43,10 @@ CREATE TABLE IF NOT EXISTS budget_requests (
   approved_amount DECIMAL(12, 2),
   reviewed_by INT,
   reviewed_at TIMESTAMP NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-  FOREIGN KEY (reviewed_by) REFERENCES users(id) ON DELETE SET NULL
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Activity log table
+-- Activity log table (no foreign keys for TiDB compatibility)
 CREATE TABLE IF NOT EXISTS activity_log (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
@@ -54,8 +54,7 @@ CREATE TABLE IF NOT EXISTS activity_log (
   action VARCHAR(255) NOT NULL,
   details VARCHAR(255),
   amount DECIMAL(12, 2),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Insert default employer account

@@ -18,7 +18,7 @@ const ActivityLog = ({ refreshTrigger }) => {
   const fetchActivities = useCallback(async () => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch('${API_URL}/api/activity', {
+      const response = await fetch(`${API_URL}/api/activity`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 

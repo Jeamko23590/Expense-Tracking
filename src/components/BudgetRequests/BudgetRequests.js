@@ -18,7 +18,7 @@ const BudgetRequests = ({ onAction }) => {
   const fetchRequests = async () => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch('${API_URL}/api/budget-requests', {
+      const response = await fetch(`${API_URL}/api/budget-requests`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
