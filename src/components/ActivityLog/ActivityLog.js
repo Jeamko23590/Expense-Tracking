@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { API_URL } from '../../config';
 import './ActivityLog.css';
 
 /**
@@ -17,7 +18,7 @@ const ActivityLog = ({ refreshTrigger }) => {
   const fetchActivities = useCallback(async () => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch('http://localhost:5000/api/activity', {
+      const response = await fetch('${API_URL}/api/activity', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 

@@ -10,8 +10,12 @@ const budgetRequestRoutes = require('./routes/budgetRequests');
 
 const app = express();
 
-// Middleware
-app.use(cors());
+// CORS configuration - allow frontend URL in production
+const corsOptions = {
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  credentials: true
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Routes

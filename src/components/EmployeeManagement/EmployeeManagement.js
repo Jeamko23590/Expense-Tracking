@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import AddEmployeeModal from './AddEmployeeModal';
 import AddBudgetModal from './AddBudgetModal';
+import { API_URL } from '../../config';
 import './EmployeeManagement.css';
 
 /**
@@ -27,7 +28,7 @@ const EmployeeManagement = ({ onEmployeeAdded }) => {
   const fetchEmployees = async () => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch('http://localhost:5000/api/employees', {
+      const response = await fetch('${API_URL}/api/employees', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -48,7 +49,7 @@ const EmployeeManagement = ({ onEmployeeAdded }) => {
   const handleAddEmployee = async (employeeData) => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch('http://localhost:5000/api/employees', {
+      const response = await fetch('${API_URL}/api/employees', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -74,7 +75,7 @@ const EmployeeManagement = ({ onEmployeeAdded }) => {
   const handleAddBudget = async (employeeId, amount) => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch(`http://localhost:5000/api/employees/${employeeId}/budget`, {
+      const response = await fetch(`${API_URL}/api/employees/${employeeId}/budget`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -153,7 +154,7 @@ const EmployeeManagement = ({ onEmployeeAdded }) => {
     setExpenseSearchTerm(''); // Reset search when opening modal
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch(`http://localhost:5000/api/employees/${employee.id}/expenses`, {
+      const response = await fetch(`${API_URL}/api/employees/${employee.id}/expenses`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 

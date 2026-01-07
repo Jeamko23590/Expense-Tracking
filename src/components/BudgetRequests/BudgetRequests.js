@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { API_URL } from '../../config';
 import './BudgetRequests.css';
 
 /**
@@ -17,7 +18,7 @@ const BudgetRequests = ({ onAction }) => {
   const fetchRequests = async () => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch('http://localhost:5000/api/budget-requests', {
+      const response = await fetch('${API_URL}/api/budget-requests', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
@@ -42,7 +43,7 @@ const BudgetRequests = ({ onAction }) => {
         body.approvedAmount = customAmount;
       }
 
-      const response = await fetch(`http://localhost:5000/api/budget-requests/${id}`, {
+      const response = await fetch(`${API_URL}/api/budget-requests/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

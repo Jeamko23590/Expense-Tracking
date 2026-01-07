@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { API_URL } from '../../config';
 import './RequestBudgetModal.css';
 
 /**
@@ -25,7 +26,7 @@ const RequestBudgetModal = ({ isOpen, onClose, onSubmit, currentBalance }) => {
 
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch('http://localhost:5000/api/budget-requests', {
+      const response = await fetch(`${API_URL}/api/budget-requests`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

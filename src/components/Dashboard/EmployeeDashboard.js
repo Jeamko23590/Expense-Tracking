@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import ExpenseTransactions from '../ExpenseTransactions';
 import RequestBudgetModal from './RequestBudgetModal';
+import { API_URL } from '../../config';
 import './EmployeeDashboard.css';
 
 /**
@@ -26,7 +27,7 @@ const EmployeeDashboard = ({ user }) => {
   const fetchStats = async () => {
     try {
       const token = localStorage.getItem('corticoExpenseToken');
-      const response = await fetch('http://localhost:5000/api/expenses/stats', {
+      const response = await fetch(`${API_URL}/api/expenses/stats`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {

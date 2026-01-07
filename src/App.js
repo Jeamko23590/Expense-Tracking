@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
 import { EmployerDashboard, EmployeeDashboard } from './components/Dashboard';
+import { API_URL } from './config';
 import './styles/App.css';
 
 /**
@@ -33,7 +34,7 @@ function App() {
       if (token) {
         try {
           // Validate token with server
-          const response = await fetch('http://localhost:5000/api/auth/me', {
+          const response = await fetch(`${API_URL}/api/auth/me`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
