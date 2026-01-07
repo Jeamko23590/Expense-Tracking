@@ -7,9 +7,8 @@ A single-page application for employees to easily report and track expenses, wit
 - Role-based dashboards (Employer and Employee views)
 - Employee management with budget allocation
 - Add and track expense transactions
+- Activity log for recent management actions
 - View all expenses with status badges (pending/approved/rejected)
-- Search/filter expenses by description
-- View total expenses by week for the entire year
 - Mobile-friendly responsive design
 - Data persistence using localStorage
 - Demo accounts for quick testing
@@ -71,6 +70,10 @@ expense-tracker/
 │   └── index.html
 ├── src/
 │   ├── components/
+│   │   ├── ActivityLog/
+│   │   │   ├── ActivityLog.js
+│   │   │   ├── ActivityLog.css
+│   │   │   └── index.js
 │   │   ├── Dashboard/
 │   │   │   ├── EmployerDashboard.js
 │   │   │   ├── EmployerDashboard.css

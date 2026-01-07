@@ -28,6 +28,24 @@ const EmployeeManagement = () => {
   // Add new employee
   const handleAddEmployee = (newEmployee) => {
     setEmployees(prev => [...prev, newEmployee]);
+    
+    // Log activity
+    const activity = {
+      id: Date.now(),
+      type: 'employee_added',
+      action: 'Added new employee',
+      details: newEmployee.name,
+      amount: newEmployee.budget,
+      timestamp: new Date().toISOString()
+    };
+    
+    const savedActivities = localStorage.getItem('corticoExpenseActivities');
+    const activities = savedActivities ? JSON.parse(savedActivities) : [];
+    activities.unshift(activity);
+    localStorage.setItem('corticoExpenseActivities', JSON.stringify(activities.slice(0, 50)));
+    
+    // Trigger storage event for ActivityLog to update
+    window.dispatchEvent(new Event('storage'));
   };
 
   // Calculate usage percentage and determine color
