@@ -116,6 +116,37 @@ router.delete('/:id', auth, employerOnly, async (req, res) => {
 });
 
 /**
+ * GET /api/employees/:id/expenses
+ * Get expenses for a specific employee (Employer only)
+ */
+router.get('/:id/expenses', auth, employerOnly, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const [rows] = await pool.query(
+      `SELECT id, description, amount, category, date, notes, created_at 
+       FROM expenses WHERE user_id = ? ORDER BY created_at DESC`,
+      [id]
+    );
+
+    const expenses = rows.map(exp => ({
+      id: exp.id,
+      description: exp.description,
+      amount: parseFloat(exp.amount),
+      category: exp.category,
+      date: exp.date,
+      notes: exp.notes,
+      createdAt: exp.created_at
+    }));
+
+    res.json(expenses);
+  } catch (error) {
+    console.error('Get employee expenses error:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+/**
  * PUT /api/employees/:id/budget
  * Add budget to employee (Employer only)
  */
