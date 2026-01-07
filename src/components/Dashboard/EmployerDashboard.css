@@ -1,5 +1,5 @@
-/* Dashboard container */
-.dashboard {
+/* Employer Dashboard container */
+.employer-dashboard {
   padding: 24px;
   max-width: 1200px;
   margin: 0 auto;
@@ -29,13 +29,13 @@
   background-color: #ffffff;
 }
 
-/* Blue card variant */
-.card-blue {
-  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+/* Indigo card variant (primary - Cortico style) */
+.card-indigo {
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
 }
 
-.card-blue .card-title,
-.card-blue .card-subtitle {
+.card-indigo .card-title,
+.card-indigo .card-subtitle {
   color: rgba(255, 255, 255, 0.9);
 }
 
@@ -68,22 +68,22 @@
   height: 20px;
 }
 
-/* Blue icon on white background - visible light blue */
-.icon-blue {
-  background-color: #E0EAFF;
-  color: #2563EB;
+/* Indigo icon on white background */
+.icon-indigo {
+  background-color: #E0E7FF;
+  color: #4338CA;
 }
 
-/* White icon on blue card */
+/* White icon on indigo card */
 .icon-white {
   background-color: rgba(255, 255, 255, 0.25);
   color: #ffffff;
 }
 
-/* Yellow icon for pending - more visible */
+/* Yellow/amber icon for pending */
 .icon-yellow {
-  background-color: #FEF3C7;
-  color: #D97706;
+  background-color: #FDE68A;
+  color: #B45309;
 }
 
 /* Card value - large number */
@@ -94,8 +94,8 @@
   line-height: 1.2;
 }
 
-.value-blue {
-  color: #3B82F6;
+.value-indigo {
+  color: #4338CA;
 }
 
 .value-white {
@@ -103,7 +103,7 @@
 }
 
 .value-yellow {
-  color: #CA8A04;
+  color: #B45309;
 }
 
 /* Card subtitle - description text */
@@ -114,7 +114,7 @@
 
 /* Responsive - stack cards on mobile */
 @media (max-width: 768px) {
-  .dashboard {
+  .employer-dashboard {
     padding: 16px;
   }
   
@@ -134,7 +134,7 @@
 
 /* Tablet - keep 2 columns but smaller gap */
 @media (min-width: 769px) and (max-width: 1024px) {
-  .dashboard {
+  .employer-dashboard {
     padding: 20px;
   }
   

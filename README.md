@@ -1,20 +1,22 @@
-# ExpenseWallet - Expense Tracker Application
+# CorticoExpense - Expense Tracker Application
 
-A single-page application for employees to easily report and track expenses.
+A single-page application for employees to easily report and track expenses, with separate dashboards for employers and employees.
 
 ## Features
 
+- Role-based dashboards (Employer and Employee views)
 - Add new expenses with date, description, and amount
 - View all expenses in a table with running total
 - Search/filter expenses by description
 - View total expenses by week for the entire year
 - Mobile-friendly responsive design
 - Data persistence using localStorage
+- Demo accounts for quick testing
 
 ## Tech Stack
 
 - **Frontend:** React.js (JavaScript, no TypeScript)
-- **Styling:** Custom CSS with modern design principles
+- **Styling:** Custom CSS with Cortico color scheme
 - **Storage:** localStorage for data persistence
 
 ## Getting Started
@@ -29,7 +31,7 @@ Make sure you have the following installed:
 
 ```bash
 git clone https://github.com/Jeamko23590/Expense-Tracking.git
-cd Expense-Tracker
+cd Expense-Tracking/expense-tracker
 ```
 
 ### Install Dependencies
@@ -45,6 +47,12 @@ npm start
 ```
 
 The app will open automatically in your browser at [http://localhost:3000](http://localhost:3000).
+
+### Demo Accounts
+
+Use these demo accounts to test the application:
+- **Employer:** employer@company.com (any password)
+- **Employee:** employee@company.com (any password)
 
 ### Build for Production
 
@@ -63,8 +71,14 @@ expense-tracker/
 ├── src/
 │   ├── components/
 │   │   ├── Dashboard/
-│   │   │   ├── Dashboard.js
-│   │   │   ├── Dashboard.css
+│   │   │   ├── EmployerDashboard.js
+│   │   │   ├── EmployerDashboard.css
+│   │   │   ├── EmployeeDashboard.js
+│   │   │   ├── EmployeeDashboard.css
+│   │   │   └── index.js
+│   │   ├── Login/
+│   │   │   ├── Login.js
+│   │   │   ├── Login.css
 │   │   │   └── index.js
 │   │   └── Navbar/
 │   │       ├── Navbar.js

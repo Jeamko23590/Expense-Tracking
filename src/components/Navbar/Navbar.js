@@ -4,9 +4,9 @@ import './Navbar.css';
 /**
  * Navbar Component
  * Displays the app header with logo, title, user email, and sign out button.
- * This is a static navigation bar for the expense tracker application.
+ * Receives user data and logout handler from parent component.
  */
-const Navbar = () => {
+const Navbar = ({ user, onLogout }) => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
@@ -23,13 +23,13 @@ const Navbar = () => {
             {/* Main wallet body */}
             <rect x="4" y="14" width="32" height="20" rx="3" fill="white"/>
             {/* Wallet clasp/button */}
-            <rect x="26" y="21" width="6" height="6" rx="1.5" fill="#3B82F6"/>
+            <rect x="26" y="21" width="6" height="6" rx="1.5" fill="#6366F1"/>
           </svg>
         </div>
         
         {/* App title and user info */}
         <div className="navbar-info">
-          <h1 className="navbar-title">ExpenseWallet</h1>
+          <h1 className="navbar-title">CorticoExpense</h1>
           <span className="navbar-email">
             {/* Small envelope icon */}
             <svg 
@@ -41,13 +41,13 @@ const Navbar = () => {
               <rect x="1" y="3" width="14" height="10" rx="1.5" stroke="#6B7280" strokeWidth="1.2" fill="none"/>
               <path d="M1 4.5L8 9L15 4.5" stroke="#6B7280" strokeWidth="1.2" fill="none"/>
             </svg>
-            employer@company.com
+            {user?.email || 'employer@company.com'}
           </span>
         </div>
       </div>
       
       {/* Sign out button */}
-      <button className="navbar-signout">
+      <button className="navbar-signout" onClick={onLogout}>
         {/* Exit/logout arrow icon */}
         <svg 
           viewBox="0 0 20 20" 

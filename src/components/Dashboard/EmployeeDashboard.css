@@ -1,0 +1,245 @@
+/* Employee Dashboard Container */
+.employee-dashboard {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Main Wallet Balance Card */
+.wallet-card {
+  background: linear-gradient(135deg, #6366F1 0%, #4F46E5 100%);
+  border-radius: 20px;
+  padding: 24px 28px;
+  color: #ffffff;
+  box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+  margin-bottom: 24px;
+}
+
+.wallet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.wallet-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.wallet-title-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.wallet-icon-container {
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wallet-dollar-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.wallet-balance {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.wallet-subtitle {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 20px;
+}
+
+/* Budget Breakdown Section */
+.budget-breakdown {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.budget-item {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.budget-label {
+  display: block;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 6px;
+}
+
+.budget-value {
+  display: block;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+/* Budget Usage Progress Bar */
+.budget-usage {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.usage-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.usage-percentage {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.progress-bar {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #ffffff;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+/* Expense Summary Cards Grid */
+.expense-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.expense-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px 24px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.expense-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.expense-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #6B7280;
+}
+
+.expense-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.expense-card-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Icon color variants */
+.icon-indigo {
+  background-color: #E0E7FF;
+  color: #4338CA;
+}
+
+.icon-green {
+  background-color: #A7F3D0;
+  color: #047857;
+}
+
+.icon-yellow {
+  background-color: #FDE68A;
+  color: #B45309;
+}
+
+/* Card value styles */
+.expense-card-value {
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.value-indigo {
+  color: #4338CA;
+}
+
+.value-green {
+  color: #047857;
+}
+
+.value-yellow {
+  color: #B45309;
+}
+
+.expense-card-subtitle {
+  font-size: 13px;
+  color: #9CA3AF;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .employee-dashboard {
+    padding: 16px;
+  }
+
+  .wallet-card {
+    padding: 20px;
+  }
+
+  .wallet-balance {
+    font-size: 36px;
+  }
+
+  .budget-breakdown {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .expense-cards {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .budget-breakdown {
+    gap: 10px;
+  }
+
+  .budget-value {
+    font-size: 18px;
+  }
+
+  .expense-cards {
+    gap: 16px;
+  }
+}
