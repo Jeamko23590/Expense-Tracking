@@ -6,22 +6,33 @@ import './styles/App.css';
 
 /**
  * Main App Component
- * Handles authentication state and renders appropriate view.
- * Shows Login page when not authenticated, Dashboard when logged in.
- * Displays different dashboards based on user role (Employer vs Employee).
+ * 
+ * Root component that manages authentication state and routing.
+ * 
+ * Architecture decisions:
+ * - Single Page Application (SPA) - no page reloads for better UX
+ * - JWT stored in localStorage for persistent sessions across browser refreshes
+ * - Role-based rendering - Employer and Employee see different dashboards
+ * - Auth check on mount ensures users stay logged in after page refresh
  */
 function App() {
-  // User state - null when not logged in
+  // User state - null when not logged in, contains user data when authenticated
   const [user, setUser] = useState(null);
+  // Loading state prevents flash of login page while checking existing token
   const [loading, setLoading] = useState(true);
 
-  // Check for existing token on mount
+  /**
+   * Check for existing authentication on app mount
+   * This allows users to stay logged in after closing/reopening the browser
+   * Token is validated with the server to ensure it hasn't expired
+   */
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem('corticoExpenseToken');
       
       if (token) {
         try {
+          // Validate token with server
           const response = await fetch('http://localhost:5000/api/auth/me', {
             headers: {
               'Authorization': `Bearer ${token}`
@@ -32,7 +43,7 @@ function App() {
             const userData = await response.json();
             setUser(userData);
           } else {
-            // Token invalid, clear it
+            // Token invalid or expired - clear it to force re-login
             localStorage.removeItem('corticoExpenseToken');
           }
         } catch (error) {
@@ -47,18 +58,19 @@ function App() {
     checkAuth();
   }, []);
 
-  // Handle login - save user to state
+  // Handle successful login - update state with user data
   const handleLogin = (userData) => {
     setUser(userData);
   };
 
-  // Handle logout - clear user from state and localStorage
+  // Handle logout - clear all auth state
   const handleLogout = () => {
     setUser(null);
     localStorage.removeItem('corticoExpenseToken');
   };
 
-  // Show loading state
+  // Show loading spinner while checking authentication
+  // Prevents flash of login page for already-authenticated users
   if (loading) {
     return (
       <div className="App loading">
@@ -67,15 +79,16 @@ function App() {
     );
   }
 
-  // Show login page if not authenticated
+  // Unauthenticated users see the login page
   if (!user) {
     return <Login onLogin={handleLogin} />;
   }
 
-  // Determine which dashboard to show based on user role
+  // Role-based dashboard rendering
+  // Employers see employee management, budget requests, activity log
+  // Employees see their wallet, expenses, and can request budget increases
   const isEmployee = user.role === 'Employee';
 
-  // Show main app when authenticated
   return (
     <div className="App">
       <Navbar user={user} onLogout={handleLogout} />

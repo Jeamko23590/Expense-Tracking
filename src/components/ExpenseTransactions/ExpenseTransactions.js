@@ -5,20 +5,31 @@ import './ExpenseTransactions.css';
 
 /**
  * ExpenseTransactions Component
- * Displays list of expense transactions. Expenses are instant (no approval needed).
+ * 
+ * Core component for the expense tracking feature. Displays a list of expenses
+ * with search, filter, and weekly breakdown capabilities.
+ * 
+ * Design decisions:
+ * - Uses local state for filters to provide instant feedback without API calls
+ * - Weekly breakdown calculates on client-side to reduce server load
+ * - Filtering happens on already-fetched data for better UX (no loading states)
  */
 const ExpenseTransactions = ({ user, onExpenseAdded }) => {
+  // Expense data and UI state
   const [expenses, setExpenses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [insufficientModal, setInsufficientModal] = useState({ open: false, balance: 0, requested: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  
+  // Filter states - kept separate for independent control
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('all');
   const [employeeFilter, setEmployeeFilter] = useState('all');
   const [showWeeklyBreakdown, setShowWeeklyBreakdown] = useState(false);
   
+  // Role check for conditional rendering (employers see all expenses, employees see their own)
   const isEmployer = user?.role === 'Employer';
 
   useEffect(() => {
@@ -155,17 +166,21 @@ const ExpenseTransactions = ({ user, onExpenseAdded }) => {
   // Calculate total of filtered expenses
   const totalExpenses = filteredExpenses.reduce((sum, exp) => sum + exp.amount, 0);
 
-  // Calculate weekly breakdown for the current year
+  /**
+   * Calculate weekly breakdown for the current year
+   * Groups all expenses by ISO week number to show spending patterns
+   * Only includes weeks that have expenses (filters out empty weeks)
+   */
   const getWeeklyBreakdown = () => {
     const currentYear = new Date().getFullYear();
     const weeks = {};
     
-    // Initialize all 52 weeks
+    // Initialize all 52 weeks with zero values
     for (let i = 1; i <= 52; i++) {
       weeks[i] = { week: i, total: 0, count: 0 };
     }
 
-    // Group expenses by week
+    // Aggregate expenses by week number
     expenses.forEach(expense => {
       const expDate = new Date(expense.date);
       if (expDate.getFullYear() === currentYear) {
@@ -177,10 +192,14 @@ const ExpenseTransactions = ({ user, onExpenseAdded }) => {
       }
     });
 
+    // Return only weeks with expenses for cleaner display
     return Object.values(weeks).filter(w => w.total > 0);
   };
 
-  // Get ISO week number
+  /**
+   * Get ISO week number from date
+   * Uses ISO 8601 standard where week 1 contains the first Thursday of the year
+   */
   const getWeekNumber = (date) => {
     const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
     const dayNum = d.getUTCDay() || 7;

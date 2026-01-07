@@ -18,6 +18,7 @@ const EmployeeManagement = ({ onEmployeeAdded }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('all');
+  const [expenseSearchTerm, setExpenseSearchTerm] = useState('');
 
   useEffect(() => {
     fetchEmployees();
@@ -149,6 +150,7 @@ const EmployeeManagement = ({ onEmployeeAdded }) => {
 
   const fetchEmployeeExpenses = async (employee) => {
     setExpensesModal({ open: true, employee, expenses: [], loading: true });
+    setExpenseSearchTerm(''); // Reset search when opening modal
     try {
       const token = localStorage.getItem('corticoExpenseToken');
       const response = await fetch(`http://localhost:5000/api/employees/${employee.id}/expenses`, {
@@ -166,6 +168,13 @@ const EmployeeManagement = ({ onEmployeeAdded }) => {
       setExpensesModal(prev => ({ ...prev, expenses: [], loading: false }));
     }
   };
+
+  // Filter expenses in modal by description
+  const filteredModalExpenses = expensesModal.expenses.filter(expense => 
+    expenseSearchTerm === '' || 
+    expense.description.toLowerCase().includes(expenseSearchTerm.toLowerCase()) ||
+    expense.category.toLowerCase().includes(expenseSearchTerm.toLowerCase())
+  );
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -382,13 +391,32 @@ const EmployeeManagement = ({ onEmployeeAdded }) => {
               </div>
             </div>
 
+            {/* Search filter for expenses */}
+            <div className="expenses-modal-search">
+              <svg viewBox="0 0 24 24" fill="none" className="expenses-search-icon">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+              <input
+                type="text"
+                placeholder="Search by description..."
+                value={expenseSearchTerm}
+                onChange={(e) => setExpenseSearchTerm(e.target.value)}
+                className="expenses-search-input"
+              />
+            </div>
+
             <div className="expenses-modal-list">
               {expensesModal.loading ? (
                 <div className="expenses-modal-empty">Loading expenses...</div>
-              ) : expensesModal.expenses.length === 0 ? (
-                <div className="expenses-modal-empty">No expenses recorded yet.</div>
+              ) : filteredModalExpenses.length === 0 ? (
+                <div className="expenses-modal-empty">
+                  {expensesModal.expenses.length === 0 
+                    ? 'No expenses recorded yet.' 
+                    : 'No expenses match your search.'}
+                </div>
               ) : (
-                expensesModal.expenses.map((expense) => (
+                filteredModalExpenses.map((expense) => (
                   <div key={expense.id} className="expenses-modal-item">
                     <div className="expenses-modal-item-left">
                       <div className="expenses-modal-item-icon">

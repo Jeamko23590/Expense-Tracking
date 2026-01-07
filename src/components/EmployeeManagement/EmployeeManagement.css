@@ -720,3 +720,49 @@
     align-self: flex-end;
   }
 }
+
+
+/* Expenses Modal Search */
+.expenses-modal-search {
+  position: relative;
+  padding: 0 24px 16px;
+}
+
+.expenses-search-icon {
+  position: absolute;
+  left: 36px;
+  top: 50%;
+  transform: translateY(-70%);
+  width: 16px;
+  height: 16px;
+  color: #9CA3AF;
+}
+
+.expenses-search-input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #1F2937;
+  transition: border-color 0.15s ease;
+}
+
+.expenses-search-input:focus {
+  outline: none;
+  border-color: #6366F1;
+}
+
+.expenses-search-input::placeholder {
+  color: #9CA3AF;
+}
+
+@media (max-width: 768px) {
+  .expenses-modal-search {
+    padding: 0 16px 12px;
+  }
+
+  .expenses-search-icon {
+    left: 28px;
+  }
+}
