@@ -99,7 +99,9 @@ expense-tracker/
 │   ├── middleware/
 │   │   └── auth.js
 │   ├── routes/
-│   │   └── auth.js
+│   │   ├── auth.js
+│   │   ├── employees.js
+│   │   └── activity.js
 │   ├── server.js
 │   ├── package.json
 │   └── .env
@@ -125,6 +127,14 @@ expense-tracker/
 ### Authentication
 - `POST /api/auth/login` - User login
 - `GET /api/auth/me` - Get current user
+
+### Employees (Employer only)
+- `GET /api/employees` - Get all employees
+- `POST /api/employees` - Add new employee
+- `DELETE /api/employees/:id` - Delete employee
+
+### Activity Log (Employer only)
+- `GET /api/activity` - Get recent activity logs
 
 ## License
 

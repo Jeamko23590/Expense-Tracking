@@ -1,51 +1,75 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import AddEmployeeModal from './AddEmployeeModal';
 import './EmployeeManagement.css';
 
 /**
  * EmployeeManagement Component
  * Displays employee budget management section for employers.
- * Shows list of employees with their budget allocation, spending, and remaining balance.
- * Manages employees in localStorage.
+ * Fetches employees from backend API and persists to database.
  */
-const EmployeeManagement = () => {
+const EmployeeManagement = ({ onEmployeeAdded }) => {
   const [employees, setEmployees] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Load employees from localStorage on mount
+  // Fetch employees from API on mount
   useEffect(() => {
-    const savedEmployees = localStorage.getItem('corticoExpenseEmployees');
-    if (savedEmployees) {
-      setEmployees(JSON.parse(savedEmployees));
-    }
+    fetchEmployees();
   }, []);
 
-  // Save employees to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('corticoExpenseEmployees', JSON.stringify(employees));
-  }, [employees]);
+  // Fetch employees from backend
+  const fetchEmployees = async () => {
+    try {
+      const token = localStorage.getItem('corticoExpenseToken');
+      const response = await fetch('http://localhost:5000/api/employees', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
-  // Add new employee
-  const handleAddEmployee = (newEmployee) => {
-    setEmployees(prev => [...prev, newEmployee]);
-    
-    // Log activity
-    const activity = {
-      id: Date.now(),
-      type: 'employee_added',
-      action: 'Added new employee',
-      details: newEmployee.name,
-      amount: newEmployee.budget,
-      timestamp: new Date().toISOString()
-    };
-    
-    const savedActivities = localStorage.getItem('corticoExpenseActivities');
-    const activities = savedActivities ? JSON.parse(savedActivities) : [];
-    activities.unshift(activity);
-    localStorage.setItem('corticoExpenseActivities', JSON.stringify(activities.slice(0, 50)));
-    
-    // Trigger storage event for ActivityLog to update
-    window.dispatchEvent(new Event('storage'));
+      if (response.ok) {
+        const data = await response.json();
+        setEmployees(data);
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Failed to fetch employees');
+      }
+    } catch (err) {
+      setError('Failed to connect to server');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Add new employee via API
+  const handleAddEmployee = async (employeeData) => {
+    try {
+      const token = localStorage.getItem('corticoExpenseToken');
+      const response = await fetch('http://localhost:5000/api/employees', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(employeeData)
+      });
+
+      if (response.ok) {
+        const newEmployee = await response.json();
+        setEmployees(prev => [newEmployee, ...prev]);
+        // Notify parent to refresh activity log
+        if (onEmployeeAdded) {
+          onEmployeeAdded();
+        }
+        return { success: true };
+      } else {
+        const errorData = await response.json();
+        return { success: false, message: errorData.message };
+      }
+    } catch (err) {
+      return { success: false, message: 'Failed to connect to server' };
+    }
   };
 
   // Calculate usage percentage and determine color
@@ -66,6 +90,14 @@ const EmployeeManagement = () => {
       .toUpperCase()
       .slice(0, 2);
   };
+
+  if (loading) {
+    return (
+      <div className="employee-management">
+        <div className="loading-state">Loading employees...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="employee-management">
@@ -91,6 +123,9 @@ const EmployeeManagement = () => {
           Add Employee
         </button>
       </div>
+
+      {/* Error Message */}
+      {error && <div className="error-state">{error}</div>}
 
       {/* Employee List */}
       <div className="employee-list">

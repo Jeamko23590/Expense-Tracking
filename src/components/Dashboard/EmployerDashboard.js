@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState } from 'react';
 import EmployeeManagement from '../EmployeeManagement';
 import ActivityLog from '../ActivityLog';
 import './EmployerDashboard.css';
@@ -9,6 +9,14 @@ import './EmployerDashboard.css';
  * Plus Employee Management section and Activity Log sidebar.
  */
 const EmployerDashboard = () => {
+  // State to trigger activity log refresh when employee is added
+  const [activityRefresh, setActivityRefresh] = useState(0);
+
+  // Handler to refresh activity log
+  const handleEmployeeAdded = () => {
+    setActivityRefresh(prev => prev + 1);
+  };
+
   return (
     <div className="employer-dashboard">
       <div className="dashboard-layout">
@@ -80,12 +88,12 @@ const EmployerDashboard = () => {
           </div>
 
           {/* Employee Budget Management Section */}
-          <EmployeeManagement />
+          <EmployeeManagement onEmployeeAdded={handleEmployeeAdded} />
         </div>
 
         {/* Sidebar - Activity Log */}
         <div className="dashboard-sidebar">
-          <ActivityLog />
+          <ActivityLog refreshTrigger={activityRefresh} />
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './AddEmployeeModal.css';
 
 /**
  * AddEmployeeModal Component
- * Modal form for adding new employees with full details.
+ * Modal form for adding new employees via API.
  */
 const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
   const [formData, setFormData] = useState({
@@ -18,6 +18,8 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [apiError, setApiError] = useState('');
 
   // Department options
   const departments = [
@@ -39,23 +41,18 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
       ...prev,
       [name]: value
     }));
-    // Clear error when user types
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
+    if (apiError) setApiError('');
   };
 
   // Validate form
   const validateForm = () => {
     const newErrors = {};
     
-    if (!formData.firstName.trim()) {
-      newErrors.firstName = 'First name is required';
-    }
-
-    if (!formData.lastName.trim()) {
-      newErrors.lastName = 'Last name is required';
-    }
+    if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
+    if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
     
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
@@ -69,13 +66,8 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
       newErrors.password = 'Password must be at least 6 characters';
     }
 
-    if (!formData.title.trim()) {
-      newErrors.title = 'Job title is required';
-    }
-
-    if (!formData.department) {
-      newErrors.department = 'Department is required';
-    }
+    if (!formData.title.trim()) newErrors.title = 'Job title is required';
+    if (!formData.department) newErrors.department = 'Department is required';
     
     if (!formData.budget) {
       newErrors.budget = 'Budget is required';
@@ -88,31 +80,31 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (validateForm()) {
-      const fullName = `${formData.firstName.trim()} ${formData.lastName.trim()}`;
-      
-      const newEmployee = {
-        id: Date.now(),
-        firstName: formData.firstName.trim(),
-        lastName: formData.lastName.trim(),
-        name: fullName,
-        email: formData.email.trim().toLowerCase(),
-        password: formData.password,
-        title: formData.title.trim(),
-        department: formData.department,
-        phone: formData.phone.trim(),
-        budget: Number(formData.budget),
-        spent: 0,
-        role: 'Employee',
-        createdAt: new Date().toISOString()
-      };
-      
-      onAdd(newEmployee);
-      
-      // Reset form
+    if (!validateForm()) return;
+
+    setSubmitting(true);
+    setApiError('');
+
+    const employeeData = {
+      firstName: formData.firstName.trim(),
+      lastName: formData.lastName.trim(),
+      email: formData.email.trim().toLowerCase(),
+      password: formData.password,
+      title: formData.title.trim(),
+      department: formData.department,
+      phone: formData.phone.trim(),
+      budget: Number(formData.budget)
+    };
+
+    const result = await onAdd(employeeData);
+
+    setSubmitting(false);
+
+    if (result.success) {
+      // Reset form and close modal
       setFormData({
         firstName: '',
         lastName: '',
@@ -125,6 +117,8 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
       });
       setErrors({});
       onClose();
+    } else {
+      setApiError(result.message || 'Failed to add employee');
     }
   };
 
@@ -141,6 +135,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
       budget: ''
     });
     setErrors({});
+    setApiError('');
     onClose();
   };
 
@@ -160,6 +155,9 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
           </button>
         </div>
 
+        {/* API Error */}
+        {apiError && <div className="api-error">{apiError}</div>}
+
         {/* Modal Form */}
         <form onSubmit={handleSubmit} className="modal-form">
           {/* Personal Information Section */}
@@ -178,6 +176,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
                   value={formData.firstName}
                   onChange={handleChange}
                   className={errors.firstName ? 'input-error' : ''}
+                  disabled={submitting}
                 />
                 {errors.firstName && <span className="error-message">{errors.firstName}</span>}
               </div>
@@ -192,6 +191,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
                   value={formData.lastName}
                   onChange={handleChange}
                   className={errors.lastName ? 'input-error' : ''}
+                  disabled={submitting}
                 />
                 {errors.lastName && <span className="error-message">{errors.lastName}</span>}
               </div>
@@ -208,6 +208,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
                 value={formData.email}
                 onChange={handleChange}
                 className={errors.email ? 'input-error' : ''}
+                disabled={submitting}
               />
               {errors.email && <span className="error-message">{errors.email}</span>}
             </div>
@@ -222,6 +223,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
                 placeholder="+1 (555) 123-4567"
                 value={formData.phone}
                 onChange={handleChange}
+                disabled={submitting}
               />
             </div>
 
@@ -237,11 +239,13 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
                   value={formData.password}
                   onChange={handleChange}
                   className={errors.password ? 'input-error' : ''}
+                  disabled={submitting}
                 />
                 <button 
                   type="button" 
                   className="password-toggle"
                   onClick={() => setShowPassword(!showPassword)}
+                  disabled={submitting}
                 >
                   {showPassword ? (
                     <svg viewBox="0 0 24 24" fill="none">
@@ -275,6 +279,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
                 value={formData.title}
                 onChange={handleChange}
                 className={errors.title ? 'input-error' : ''}
+                disabled={submitting}
               />
               {errors.title && <span className="error-message">{errors.title}</span>}
             </div>
@@ -288,6 +293,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
                 value={formData.department}
                 onChange={handleChange}
                 className={errors.department ? 'input-error' : ''}
+                disabled={submitting}
               >
                 <option value="">Select Department</option>
                 {departments.map(dept => (
@@ -310,6 +316,7 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
                 className={errors.budget ? 'input-error' : ''}
                 min="0"
                 step="100"
+                disabled={submitting}
               />
               {errors.budget && <span className="error-message">{errors.budget}</span>}
             </div>
@@ -317,11 +324,11 @@ const AddEmployeeModal = ({ isOpen, onClose, onAdd }) => {
 
           {/* Form Actions */}
           <div className="modal-actions">
-            <button type="button" className="btn-cancel" onClick={handleClose}>
+            <button type="button" className="btn-cancel" onClick={handleClose} disabled={submitting}>
               Cancel
             </button>
-            <button type="submit" className="btn-submit">
-              Add Employee
+            <button type="submit" className="btn-submit" disabled={submitting}>
+              {submitting ? 'Adding...' : 'Add Employee'}
             </button>
           </div>
         </form>

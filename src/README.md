@@ -53,3 +53,6 @@ The frontend connects to the backend API at `http://localhost:5000`:
 - Login sends credentials to `/api/auth/login`
 - JWT token is stored in localStorage
 - Token is sent in Authorization header for authenticated requests
+- Employee data is fetched from `/api/employees`
+- Activity logs are fetched from `/api/activity`
+- All data is persisted to MySQL database

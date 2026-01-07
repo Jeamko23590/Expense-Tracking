@@ -1,31 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import './ActivityLog.css';
 
 /**
  * ActivityLog Component
- * Displays recent management actions like adding employees, budget changes, etc.
+ * Displays recent management actions fetched from backend API.
  */
-const ActivityLog = () => {
+const ActivityLog = ({ refreshTrigger }) => {
   const [activities, setActivities] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Load activities from localStorage on mount
-  useEffect(() => {
-    const loadActivities = () => {
-      const savedActivities = localStorage.getItem('corticoExpenseActivities');
-      if (savedActivities) {
-        setActivities(JSON.parse(savedActivities));
+  // Fetch activities from API
+  const fetchActivities = useCallback(async () => {
+    try {
+      const token = localStorage.getItem('corticoExpenseToken');
+      const response = await fetch('http://localhost:5000/api/activity', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setActivities(data);
       }
-    };
-    
-    loadActivities();
-    
-    // Listen for storage events to update in real-time
-    window.addEventListener('storage', loadActivities);
-    
-    return () => {
-      window.removeEventListener('storage', loadActivities);
-    };
+    } catch (err) {
+      console.error('Failed to fetch activities:', err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  // Load activities on mount and when refreshTrigger changes
+  useEffect(() => {
+    fetchActivities();
+  }, [fetchActivities, refreshTrigger]);
 
   // Format relative time
   const formatTimeAgo = (dateString) => {
@@ -95,7 +103,11 @@ const ActivityLog = () => {
 
       {/* Activity List */}
       <div className="activity-list">
-        {activities.length === 0 ? (
+        {loading ? (
+          <div className="activity-empty">
+            <p>Loading activities...</p>
+          </div>
+        ) : activities.length === 0 ? (
           <div className="activity-empty">
             <p>No recent activity</p>
           </div>
