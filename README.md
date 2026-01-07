@@ -5,6 +5,7 @@ A single-page application for employees to easily report and track expenses, wit
 ## Features
 
 - Role-based dashboards (Employer and Employee views)
+- Employee management with budget allocation
 - Add new expenses with date, description, and amount
 - View all expenses in a table with running total
 - Search/filter expenses by description
@@ -75,6 +76,12 @@ expense-tracker/
 │   │   │   ├── EmployerDashboard.css
 │   │   │   ├── EmployeeDashboard.js
 │   │   │   ├── EmployeeDashboard.css
+│   │   │   └── index.js
+│   │   ├── EmployeeManagement/
+│   │   │   ├── EmployeeManagement.js
+│   │   │   ├── EmployeeManagement.css
+│   │   │   ├── AddEmployeeModal.js
+│   │   │   ├── AddEmployeeModal.css
 │   │   │   └── index.js
 │   │   ├── Login/
 │   │   │   ├── Login.js

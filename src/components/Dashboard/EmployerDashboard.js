@@ -1,4 +1,5 @@
 import React from 'react';
+import EmployeeManagement from '../EmployeeManagement';
 import './EmployerDashboard.css';
 
 /**
@@ -74,6 +75,9 @@ const EmployerDashboard = () => {
         </div>
 
       </div>
+
+      {/* Employee Budget Management Section */}
+      <EmployeeManagement />
     </div>
   );
 };
